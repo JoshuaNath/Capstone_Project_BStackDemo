@@ -1,63 +1,52 @@
 pipeline {
     agent any
 
-    tools {
-        jdk 'JDK21'      
-        maven 'Maven3'   
-    }
-
     environment {
-        MVN_OPTS = '-B -DskipTests=false'  
+        APP_ENV = 'dev'
     }
 
     stages {
-        stage('Checkout') {
+        stage('Clone') {
             steps {
-                echo "Checking out the source code..."
+                echo 'Cloning repository...'
                 git branch: 'main', url: 'https://github.com/JoshuaNath/Capstone_Project_BStackDemo.git'
             }
         }
 
-        stage('Clean & Build') {
+        stage('Build & Test') {
             steps {
-                echo "Cleaning and building the project..."
-                sh 'mvn clean install'
+                echo 'Building the project and running TestNG/Cucumber tests with Maven...'
+                bat 'mvn clean test'
             }
         }
 
-        stage('Run Tests') {
+        stage('Publish Reports') {
             steps {
-                echo "Running TestNG and Cucumber tests..."
-                sh 'mvn test'
+                echo 'Publishing ExtentReports in Jenkins...'
+                publishHTML([
+                    reportDir: 'test-output/ExtentReport',    
+                    reportFiles: 'index.html',
+                    reportName: 'Extent Report',
+                    keepAll: true,
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true
+                ])
             }
         }
 
-        stage('Package') {
+        stage('Deploy') {
             steps {
-                echo "Packaging the application..."
-                sh 'mvn package'
-            }
-        }
-
-        stage('Archive Artifacts & Reports') {
-            steps {
-                echo "Archiving build artifacts and test reports..."
-                archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-                junit '**/target/surefire-reports/*.xml'
+                echo "Deploying to ${env.APP_ENV} environment..."
             }
         }
     }
 
     post {
         success {
-            echo 'Build, test, and packaging completed successfully!'
+            echo 'Pipeline succeeded!'
         }
         failure {
-            echo 'Build failed. Please check the logs.'
-        }
-        always {
-            echo 'Cleaning up workspace...'
-            cleanWs()
+            echo 'Pipeline failed! Please check Jenkins logs and ExtentReport.'
         }
     }
 }
