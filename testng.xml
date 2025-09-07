@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Complete Automation Suite" verbose="1" parallel="false">
+
+    <listeners>
+        <listener class-name="listeners.TestListener"/>
+    </listeners>
+
+    <test name="UI Tests">
+        <classes>
+            <class name="tests.HomeTest"/>
+            <class name="tests.LoginTest"/>
+            <class name="tests.WebTest"/>
+        </classes>
+    </test>
+
+    <test name="Cucumber Features">
+        <classes>
+            <class name="runners.TestRunner"/>
+        </classes>
+    </test>
+
+</suite>
