@@ -16,7 +16,7 @@
     <maven.compiler.target>21</maven.compiler.target>
   </properties>
 
-  <!-- Keep all Cucumber modules on a single, compatible version -->
+ 
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -29,43 +29,42 @@
     </dependencies>
   </dependencyManagement>
 
-  <dependencies>
-    <!-- Selenium -->
+  <dependencies> 
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>selenium-java</artifactId>
       <version>4.35.0</version>
     </dependency>
 
-    <!-- Apache POI for Excel -->
+ 
     <dependency>
       <groupId>org.apache.poi</groupId>
       <artifactId>poi-ooxml</artifactId>
       <version>5.2.3</version>
     </dependency>
 
-    <!-- Log4j Core (consider adding log4j-api and a proper config in production) -->
+
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-core</artifactId>
       <version>2.20.0</version>
     </dependency>
 
-    <!-- JSON -->
+
     <dependency>
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
       <version>20240303</version>
     </dependency>
 
-    <!-- WebDriverManager -->
+
     <dependency>
       <groupId>io.github.bonigarcia</groupId>
       <artifactId>webdrivermanager</artifactId>
       <version>5.8.0</version>
     </dependency>
 
-    <!-- TestNG -->
+
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
@@ -73,7 +72,7 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Cucumber (versions supplied by the BOM) -->
+
     <dependency>
       <groupId>io.cucumber</groupId>
       <artifactId>cucumber-java</artifactId>
@@ -85,7 +84,7 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Optional Cucumber modules commonly used -->
+
     <dependency>
       <groupId>io.cucumber</groupId>
       <artifactId>gherkin</artifactId>
@@ -97,16 +96,14 @@
       <scope>test</scope>
     </dependency>
     
-    
 
-    <!-- ExtentReports -->
     <dependency>
       <groupId>com.aventstack</groupId>
       <artifactId>extentreports</artifactId>
       <version>4.0.9</version>
     </dependency>
 
-    <!-- Cucumber + Extent adapter (community lib). Keep only if actually used. -->
+
     <dependency>
       <groupId>com.github.shivam9ronaldo7</groupId>
       <artifactId>cucumber-extent</artifactId>
@@ -114,12 +111,12 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Removed: legacy JUnit 3.8.1 to avoid conflicts with TestNG/Cucumber -->
+
   </dependencies>
 
   <build>
     <plugins>
-      <!-- Ensure Java 21 compilation -->
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -129,7 +126,7 @@
         </configuration>
       </plugin>
 
-      <!-- Surefire for unit tests (TestNG) -->
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
@@ -144,7 +141,7 @@
         </configuration>
       </plugin>
 
-      <!-- Failsafe if running integration tests separately -->
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
