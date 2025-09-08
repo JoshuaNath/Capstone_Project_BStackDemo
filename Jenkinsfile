@@ -18,30 +18,22 @@ pipeline {
     
     
     
-    stage('Commit & Push Changes') {
-    steps {
-        script {
-            echo 'Checking for changes to push...'
-            bat """
-                git config --global user.email "jenkins@pipeline.com"
-                git config --global user.name "Jenkins CI"
-                git config --global --add safe.directory %CD%
+    stage('Push Changes') {
+            steps {
+                echo 'Pushing local changes to GitHub...'
+                withCredentials([usernamePassword(credentialsId: 'CapstoneProject', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                    bat """
+                    git config user.email "nathjoshua1502@gmail.com"
+                    git config user.name "Admin"
 
-                git fetch origin
+                    git add .
+                    git commit -m "Automated commit from Jenkins" || echo "No changes to commit"
 
-                git status
-                git add .
-
-                REM Commit only if there are changes
-                git diff --cached --quiet || git commit -m "Jenkins: Auto-commit after build"
-
-                REM Push to main branch
-                git pull origin main
-                git push origin main
-            """
-        }
-    }
-}
+                    git push https://${GIT_USER}:${GIT_TOKEN}@github.com/JoshuaNath/Capstone_Project_BStackDemo.git HEAD:main
+                    """
+                }
+            }
+        }
 
 
     stage('Publish Reports') {
