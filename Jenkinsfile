@@ -20,6 +20,11 @@ pipeline {
       steps {
         echo 'Publishing Extent reports...'
 
+        cucumber fileIncludePattern: 'target/*.json',
+                 buildStatus: 'UNSTABLE',
+                 classifications: [[key: 'Env', value: "${env.APP_ENV}"]]
+
+
         // Extent HTML -> HTML Publisher (requires HTML Publisher plugin)
         publishHTML(target: [
           reportDir: 'test-output',

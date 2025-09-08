@@ -88,6 +88,17 @@ public class LoginTest {
                                .addScreenCaptureFromPath(ScreenshotUtil.takeScreenshot(driver, "LoginSuccess"));
         } catch (Exception e) { e.printStackTrace(); }
     }
+    
+    
+    @DataProvider(name = "validUsers")
+    public Object[][] getUsers() {
+        return new Object[][]{
+                {"demouser", "testingisfun99"},
+                {"fav_user", "testingisfun99"},
+                {"image_not_loading_user", "testingisfun99"},
+                {"existing_orders_user", "testingisfun99"}
+        };
+    }
 
     //  TC005: Locked user
     @Test
@@ -187,13 +198,5 @@ public class LoginTest {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    @DataProvider(name = "validUsers")
-    public Object[][] getUsers() {
-        return new Object[][]{
-                {"demouser", "testingisfun99"},
-                {"fav_user", "testingisfun99"},
-                {"image_not_loading_user", "testingisfun99"},
-                {"existing_orders_user", "testingisfun99"}
-        };
-    }
+    
 }

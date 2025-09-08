@@ -24,18 +24,16 @@ public class TestListener implements ITestListener {
     @Override
     public void onTestFailure(ITestResult result) {
         WebDriver driver = null;
-
-        
         try {
             Object testInstance = result.getInstance();
             driver = (WebDriver) testInstance.getClass().getMethod("getDriver").invoke(testInstance);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         
         ExtentReportManager.getTest().fail(result.getThrowable());
 
+        
         if (driver != null) {
             String screenshotPath = ScreenshotUtil.takeScreenshot(driver, result.getName());
             try {
