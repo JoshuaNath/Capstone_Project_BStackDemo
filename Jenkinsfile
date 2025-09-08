@@ -11,24 +11,19 @@ pipeline {
 
     stage('Build & Test') {
       steps {
-        echo 'Running TestNG + Cucumber via Maven...'
+        echo 'Running TestNG via Maven...'
         bat 'mvn -B clean test'
       }
     }
 
     stage('Publish Reports') {
       steps {
-        echo 'Publishing Cucumber and Extent reports...'
-
-        // Cucumber JSON -> rich Jenkins report
-        cucumber fileIncludePattern: 'target/cucumber-reports/*.json',
-                 buildStatus: 'UNSTABLE',
-                 classifications: [[key: 'Env', value: "${env.APP_ENV}"]]
+        echo 'Publishing Extent reports...'
 
         // Extent HTML -> HTML Publisher (requires HTML Publisher plugin)
         publishHTML(target: [
-          reportDir: 'test-output/ExtentReport',
-          reportFiles: 'index.html',
+          reportDir: 'test-output',
+          reportFiles: 'ExtentReport.html',
           reportName: 'Extent Report',
           keepAll: true,
           allowMissing: false,
@@ -46,7 +41,7 @@ pipeline {
 
   post {
     always { echo "Build result: ${currentBuild.currentResult}" }
-    success { echo '✅ Pipeline succeeded!' }
-    failure { echo '❌ Pipeline failed! Check Jenkins logs and reports.' }
+    success { echo ' Pipeline succeeded!' }
+    failure { echo ' Pipeline failed! Check Jenkins logs and reports.' }
   }
 }

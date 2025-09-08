@@ -13,7 +13,7 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onTestStart(ITestResult result) {
-        ExtentReportManager.startTest(result.getMethod().getMethodName());  // ✅ changed
+        ExtentReportManager.startTest(result.getMethod().getMethodName());
     }
 
     @Override
@@ -25,7 +25,7 @@ public class TestListener implements ITestListener {
     public void onTestFailure(ITestResult result) {
         WebDriver driver = null;
 
-        // Try to get WebDriver instance from test class
+        
         try {
             Object testInstance = result.getInstance();
             driver = (WebDriver) testInstance.getClass().getMethod("getDriver").invoke(testInstance);
@@ -33,7 +33,7 @@ public class TestListener implements ITestListener {
             e.printStackTrace();
         }
 
-        // Log failure and attach screenshot
+        
         ExtentReportManager.getTest().fail(result.getThrowable());
 
         if (driver != null) {
@@ -53,6 +53,6 @@ public class TestListener implements ITestListener {
 
     @Override
     public void onFinish(ITestContext context) {
-        ExtentReportManager.flushReports();  // ✅ changed
+        ExtentReportManager.flushReports();  
     }
 }

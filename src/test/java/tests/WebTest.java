@@ -27,7 +27,7 @@ public class WebTest {
             e.printStackTrace();
         }
 
-        // ✅ Login with fav_user
+        
         try {
 			webPage.login("fav_user", "testingisfun99");
 		} catch (InterruptedException e) {
@@ -42,6 +42,7 @@ public class WebTest {
         }
     }
 
+    //  TC014: Samsung Mobile Selection
     @Test(priority = 1)
     public void testSamsungFavoriteFlow() throws Exception {
         webPage.selectVendor("Samsung");
@@ -77,6 +78,7 @@ public class WebTest {
         }
     }
 
+    //  TC015: Apple mobile Selection
     @Test(priority = 2)
     public void testAppleFavoriteFlow() throws Exception {
         webPage.goToHomePage();
@@ -114,6 +116,7 @@ public class WebTest {
         }
     }
 
+    //  TC016: Checkout and Confirmation
     @Test(priority = 3)
     public void testCartAndCheckoutFlow() throws Exception {
         webPage.increaseProductQuantity("Galaxy S20", 2);
@@ -164,7 +167,7 @@ public class WebTest {
             e.printStackTrace();
         }
 
-        // ✅ Wait 10 seconds safely
+        
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {

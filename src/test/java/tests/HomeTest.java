@@ -31,7 +31,7 @@ public class HomeTest {
             e.printStackTrace();
         }
 
-        // Login with one fixed user
+       
         loginPage.openLoginDropdown();
         try {
             ExtentReportManager.getTest().info("Opened login dropdown")
@@ -82,7 +82,7 @@ public class HomeTest {
         DriverFactory.quitDriver();
     }
 
-    // TC001: Offers page validation
+    // TC008: Offers page validation
     @Test(priority = 1)
     public void testOffersPage() {
         String offersText = homePage.goToOffers();
@@ -106,7 +106,7 @@ public class HomeTest {
         }
     }
 
-    // TC002: Orders page validation
+    // TC009: Orders page validation
     @Test(priority = 2)
     public void testOrdersPage() {
         String ordersText = homePage.goToOrders();
@@ -130,7 +130,7 @@ public class HomeTest {
         }
     }
 
-    // TC003: Favorites page validation
+    // TC010: Favorites page validation
     @Test(priority = 3)
     public void testFavoritesPage() {
         boolean bannerVisible = homePage.goToFavorites();
@@ -151,7 +151,7 @@ public class HomeTest {
         }
     }
 
-    // TC004: Homepage logo click
+    // TC011: Homepage logo click
     @Test(priority = 4)
     public void testGoToHomePage() {
         homePage.goToHomePage();
@@ -173,7 +173,7 @@ public class HomeTest {
         }
     }
 
-    // TC005: Select all vendors
+    // TC012: Select all vendors
     @Test(priority = 5)
     public void testSelectAllVendors() {
         homePage.selectAllVendors();
@@ -194,7 +194,7 @@ public class HomeTest {
         }
     }
 
-    // TC006: Sort products
+    // TC013: Sort products
     @Test(priority = 6)
     public void testSortProducts() {
         homePage.sortBy("lowestprice");

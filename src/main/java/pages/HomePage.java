@@ -23,18 +23,14 @@ public class HomePage {
     private By ordersMessage = By.cssSelector("h2.pt-6.text-2xl.font-bold.tracking-wide.text-center");
     private By favoritesBanner = By.cssSelector("img[alt='banner main']");
 
-    // Vendors
-    private By vendorCheckboxes = By.cssSelector("label input[type='checkbox']");
-
     // Sort
     private By sortDropdown = By.cssSelector("div.sort select");
 
-    // Constructor
+
     public HomePage(WebDriver driver) {
         this.driver = driver;
     }
 
-    // Helper to wait 5 seconds between actions
     private void delay() {
         try {
             Thread.sleep(5000);
@@ -43,7 +39,6 @@ public class HomePage {
         }
     }
 
-    // Navigate to Offers page
     public String goToOffers() {
         driver.findElement(offersLink).click();
         delay();
@@ -54,7 +49,6 @@ public class HomePage {
         }
     }
 
-    // Navigate to Orders page
     public String goToOrders() {
         driver.findElement(ordersLink).click();
         delay();
@@ -65,7 +59,6 @@ public class HomePage {
         }
     }
 
-    // Navigate to Favorites page
     public boolean goToFavorites() {
         driver.findElement(favoritesLink).click();
         delay();
@@ -76,13 +69,11 @@ public class HomePage {
         } 
     }
 
-    // Click logo to go to homepage
     public void goToHomePage() {
         driver.findElement(logo).click();
         delay();
     }
 
-    // Select all vendor checkboxes
     public void selectAllVendors() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
@@ -97,10 +88,8 @@ public class HomePage {
             if (!input.isSelected()) {
                 span.click();
 
-                // Wait until the input becomes selected
                 wait.until(ExpectedConditions.elementToBeSelected(input));
 
-                // Small pause for stability (5 seconds as per your requirement)
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
@@ -111,7 +100,6 @@ public class HomePage {
     }
 
 
-    // Select sorting option
     public void sortBy(String optionValue) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
@@ -119,15 +107,13 @@ public class HomePage {
         Select select = new Select(dropdown);
         select.selectByValue(optionValue);
 
-        // Wait until the product grid reloads
-        // Assuming products are in a ul with class "product-grid"
+
         try {
             wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".product-grid li")));
         } catch (TimeoutException e) {
             System.out.println("No products found or grid did not reload in time after sorting by: " + optionValue);
         }
 
-        // Small pause for stability (5 sec as per your requirement)
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {

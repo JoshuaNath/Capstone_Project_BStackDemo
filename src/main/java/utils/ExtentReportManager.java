@@ -10,7 +10,7 @@ public class ExtentReportManager {
     private static ExtentReports extent;
     private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
 
-    // ✅ Initialize reports (equivalent to initReports)
+
     public static void initReports() {
         if (extent == null) {
             ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter("test-output/ExtentReport.html");
@@ -23,7 +23,7 @@ public class ExtentReportManager {
         }
     }
 
-    // ✅ Start a test (equivalent to startTest)
+
     public static ExtentTest startTest(String testName) {
         if (extent == null) {
             initReports();
@@ -33,7 +33,7 @@ public class ExtentReportManager {
         return extentTest;
     }
 
-    // ✅ Get the current test safely
+
     public static ExtentTest getTest() {
         if (test.get() == null) {
             return startTest("Default Test");
@@ -41,7 +41,7 @@ public class ExtentReportManager {
         return test.get();
     }
 
-    // ✅ Flush reports (equivalent to flushReports)
+
     public static void flushReports() {
         if (extent != null) {
             extent.flush();

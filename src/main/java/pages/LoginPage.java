@@ -21,12 +21,12 @@ public class LoginPage {
         this.wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(5));
     }
 
-    // Open login popup
+
     public void openLoginDropdown() {
         wait.until(ExpectedConditions.elementToBeClickable(signinBtn)).click();
     }
 
-    // Select username from dropdown
+
     public void enterUsername(String username) {
         WebElement userDropdown = wait.until(ExpectedConditions.elementToBeClickable(usernameDropdown));
         userDropdown.click();
@@ -39,7 +39,6 @@ public class LoginPage {
         userOption.click();
     }
 
-    // Select password from dropdown
     public void enterPassword(String password) {
         WebElement passDropdown = wait.until(ExpectedConditions.elementToBeClickable(passwordDropdown));
         passDropdown.click();
@@ -52,12 +51,10 @@ public class LoginPage {
         passOption.click();
     }
 
-    // Click login
     public void clickLogin() {
         wait.until(ExpectedConditions.elementToBeClickable(loginBtn)).click();
     }
 
-    // Check if user logged in
     public boolean isUserLoggedIn(String expectedUsername) {
         try {
             WebElement user = wait.until(ExpectedConditions.visibilityOfElementLocated(loggedInUser));
@@ -67,12 +64,11 @@ public class LoginPage {
         }
     }
 
-    // ✅ Updated: safely fetch error message without failing test
     public String getErrorMessage() {
         try {
             return wait.until(ExpectedConditions.visibilityOfElementLocated(errorMessage)).getText();
         } catch (TimeoutException e) {
-            return ""; // return empty string instead of null to avoid test failure
+            return ""; 
         }
     }
 }

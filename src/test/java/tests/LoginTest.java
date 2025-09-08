@@ -51,7 +51,7 @@ public class LoginTest {
         DriverFactory.quitDriver();
     }
 
-    //  TC001: Login with valid credentials
+    //  TC001-TC004: Login with valid credentials
     @Test(dataProvider = "validUsers")
     public void testValidLogin(String username, String password) throws Exception {
         loginPage.openLoginDropdown();
@@ -89,7 +89,7 @@ public class LoginTest {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    //  TC002: Locked user
+    //  TC005: Locked user
     @Test
     public void testLockedUser() throws Exception {
         loginPage.openLoginDropdown();
@@ -127,7 +127,7 @@ public class LoginTest {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    // TC003: Empty username
+    // TC006: Empty username
     @Test
     public void testEmptyUsername() throws Exception {
         loginPage.openLoginDropdown();
@@ -157,7 +157,7 @@ public class LoginTest {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    //  TC004: Empty password
+    //  TC007: Empty password
     @Test
     public void testEmptyPassword() throws Exception {
         loginPage.openLoginDropdown();

@@ -14,30 +14,29 @@ public class Hooks {
         try {
             DriverFactory.initDriver();
             DriverFactory.getDriver().get("https://bstackdemo.com/");
-            System.out.println("✅ Browser launched and navigated to bstackdemo.com for scenario: " + scenario.getName());
+            System.out.println("Browser launched and navigated to bstackdemo.com for scenario: " + scenario.getName());
         } catch (Exception e) {
-            System.err.println("❌ Error during setup: " + e.getMessage());
+            System.err.println("Error during setup: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
     @After
     public void tearDown(Scenario scenario) {
-        try {
-            // 📸 Attach screenshot if scenario failed
+        try {          
             if (scenario.isFailed() && DriverFactory.getDriver() != null) {
                 byte[] screenshot = ((TakesScreenshot) DriverFactory.getDriver()).getScreenshotAs(OutputType.BYTES);
                 scenario.attach(screenshot, "image/png", "Failure Screenshot");
             }
         } catch (Exception e) {
-            System.err.println("⚠️ Error while taking screenshot: " + e.getMessage());
+            System.err.println("Error while taking screenshot: " + e.getMessage());
             e.printStackTrace();
         } finally {
             try {
                 DriverFactory.quitDriver();
-                System.out.println("✅ Browser closed for scenario: " + scenario.getName());
+                System.out.println("Browser closed for scenario: " + scenario.getName());
             } catch (Exception e) {
-                System.err.println("⚠️ Error while quitting driver: " + e.getMessage());
+                System.err.println("Error while quitting driver: " + e.getMessage());
                 e.printStackTrace();
             }
         }

@@ -27,7 +27,7 @@ public class LoginSteps {
         loginPage.clickLogin();
     }
 
-    // ✅ Valid user
+
     @Then("the username {string} should be visible")
     public void usernameShouldBeVisible(String username) {
         Assert.assertTrue(
@@ -36,7 +36,7 @@ public class LoginSteps {
         );
     }
 
-    // ✅ Locked user
+
     @Then("a locked user message should be shown")
     public void lockedUserMessageShouldBeShown() {
         String msg = loginPage.getErrorMessage();
@@ -45,7 +45,7 @@ public class LoginSteps {
             "Unexpected locked user message: " + msg);
     }
 
-    // ✅ Invalid user
+
     @Then("an invalid user message should be shown")
     public void invalidUserMessageShouldBeShown() {
         String msg = loginPage.getErrorMessage();
@@ -54,14 +54,14 @@ public class LoginSteps {
             "Unexpected invalid user message: " + msg);
     }
 
-    // ✅ Empty username
+
     @Then("an error message for empty username should be shown")
     public void emptyUsernameMessageShouldBeShown() {
         String msg = loginPage.getErrorMessage();
         Assert.assertNotNull(msg, "Empty username message not found!");
     }
 
-    // ✅ Empty password
+
     @Then("an error message for empty password should be shown")
     public void emptyPasswordMessageShouldBeShown() {
         String msg = loginPage.getErrorMessage();
