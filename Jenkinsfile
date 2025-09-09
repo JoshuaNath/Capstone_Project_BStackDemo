@@ -69,24 +69,24 @@ pipeline {
             archiveArtifacts artifacts: 'reports/screenshots/*', fingerprint: true
  
             // Publish Cucumber Report
-            publishHTML(target: [
-                allowMissing: false,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'target/cucumber-reports',
-                reportFiles: 'cucumber-reports.html',
-                reportName: 'Cucumber Report'
-            ])
- 
-            // Publish Extent Report
-            publishHTML(target: [
-                allowMissing: false,
-                alwaysLinkToLastBuild: true,
-                keepAll: true,
-                reportDir: 'target/extent-reports',
-                reportFiles: 'index.html',
-                reportName: 'Extent Report'
-            ])
+        publishHTML(target: [
+            allowMissing: false,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: 'target',
+            reportFiles: 'cucumber-reports.html',
+            reportName: 'Cucumber Report'
+        ])
+
+        // Publish Extent Report
+        publishHTML(target: [
+            allowMissing: false,
+            alwaysLinkToLastBuild: true,
+            keepAll: true,
+            reportDir: 'test-output',
+            reportFiles: 'ExtentReport.html',
+            reportName: 'Extent Report'
+        ])
         }
     }
 }
