@@ -10,7 +10,7 @@ pipeline {
     stage('Trust local repo') {
       steps {
         ws(env.LOCAL_REPO) {
-          bat 'git config --global --add safe.directory C:\Users\nathj\eclipse-workspace\bstackdemo'
+          bat 'git config --global --add safe.directory C:\\Users\\nathj\\eclipse-workspace\\bstackdemo'
         }
       }
     }
