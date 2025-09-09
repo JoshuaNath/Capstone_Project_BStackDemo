@@ -49,7 +49,7 @@ pipeline {
           withCredentials([gitUsernamePassword(credentialsId: 'Jenkins', gitToolName: 'Default')]) {
             bat '''
               @echo off
-              git config user.email "mirthya.s.ad.2020@snsce.ac.in"
+              git config user.email "nathjoshua1502@gmail.com"
               git config user.name  "Admin"
 
               REM Ensure upstream is set once; ignore error if already set
