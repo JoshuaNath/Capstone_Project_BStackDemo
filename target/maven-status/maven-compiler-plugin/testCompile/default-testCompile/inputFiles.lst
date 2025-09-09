@@ -1,10 +1,7 @@
 C:\Users\nathj\eclipse-workspace\bstackdemo\src\test\java\stepdefinitions\LoginSteps.java
-C:\Users\nathj\eclipse-workspace\bstackdemo\src\test\java\tests\CheckoutTests.java
-C:\Users\nathj\eclipse-workspace\bstackdemo\src\test\java\tests\ProductTests.java
-C:\Users\nathj\eclipse-workspace\bstackdemo\src\test\java\tests\HomeTests.java
+C:\Users\nathj\eclipse-workspace\bstackdemo\src\test\java\tests\HomeTest.java
+C:\Users\nathj\eclipse-workspace\bstackdemo\src\test\java\tests\LoginTest.java
 C:\Users\nathj\eclipse-workspace\bstackdemo\src\test\java\runners\TestRunner.java
 C:\Users\nathj\eclipse-workspace\bstackdemo\src\test\java\stepdefinitions\Hooks.java
-C:\Users\nathj\eclipse-workspace\bstackdemo\src\test\java\tests\CartTests.java
-C:\Users\nathj\eclipse-workspace\bstackdemo\src\test\java\tests\LoginTests.java
-C:\Users\nathj\eclipse-workspace\bstackdemo\src\test\java\stepdefinitions\HomeSteps.java
-C:\Users\nathj\eclipse-workspace\bstackdemo\src\test\java\stepdefinitions\CartSteps.java
+C:\Users\nathj\eclipse-workspace\bstackdemo\src\test\java\tests\WebTest.java
+C:\Users\nathj\eclipse-workspace\bstackdemo\src\test\java\listeners\TestListener.java

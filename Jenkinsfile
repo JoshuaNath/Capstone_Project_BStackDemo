@@ -14,6 +14,16 @@ pipeline {
         }
       }
     }
+    
+    stages {
+    stage('Clone Repository') {
+      steps {
+        echo 'Cloning repository...'
+        git branch: 'main',
+            credentialsId: 'JNB_Jenkins',
+            url: 'https://github.com/JoshuaNath/Capstone_Project_BStackDemo.git'
+      }
+    }
 
     stage('Build & Test') {
       steps {
@@ -46,7 +56,7 @@ pipeline {
     stage('Commit & Push (no reset)') {
       steps {
         ws(env.LOCAL_REPO) {
-          withCredentials([gitUsernamePassword(credentialsId: 'Jenkins', gitToolName: 'Default')]) {
+          withCredentials([gitUsernamePassword(credentialsId: 'JNB_Jenkins', gitToolName: 'Default')]) {
             bat '''
               @echo off
               git config user.email "nathjoshua1502@gmail.com"
