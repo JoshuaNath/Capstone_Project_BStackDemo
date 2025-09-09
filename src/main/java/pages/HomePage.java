@@ -31,6 +31,7 @@ public class HomePage {
         this.driver = driver;
     }
 
+    //delay method for every activities going to next one after a gap of 5 seconds
     private void delay() {
         try {
             Thread.sleep(5000);
