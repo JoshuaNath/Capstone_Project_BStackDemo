@@ -1,92 +1,87 @@
 pipeline {
-    agent any
- 
-    environment {
-        BRANCH_NAME = 'main'
-        ECLIPSE_WORKSPACE = 'C:\\Users\\nathj\\eclipse-workspace\\bstackdemo'
-        COMMIT_MESSAGE = 'Jenkins: Auto-commit after build'
-    }
- 
-    // Auto-trigger every 5 mins on Git changes
-    triggers {
-        pollSCM('H H * * *')
-    }
- 
-    stages {
-        stage('Checkout from Git') {
-            steps {
-                git branch: "${env.BRANCH_NAME}",
-                    url: 'https://github.com/JoshuaNath/Capstone_Project_BStackDemo.git'
-            }
-        }
- 
-        stage('Copy Files from Eclipse Workspace') {
-            steps {
-                bat """
-                echo Copying files from Eclipse workspace...
-                xcopy /E /Y /I "${ECLIPSE_WORKSPACE}\\*" "."
-                """
-            }
-        }
- 
-        stage('Build & Test') {
-            steps {
-                bat 'mvn clean test -DsuiteXmlFile=src/test/resources/testng.xml'
-            }
-        }
- 
-        stage('Commit & Push Changes') {
-            steps {
-                script {
-                    echo 'Checking for changes to push...'
-                    withCredentials([usernamePassword(
-                        credentialsId: 'github-jenkins',
-                        usernameVariable: 'GIT_USER',
-                        passwordVariable: 'GIT_TOKEN')]) {
- 
-                        bat """
-                            git config user.email "jenkins@pipeline.com"
-                            git config user.name "Jenkins CI"
- 
-                            git status
-                            git add .
- 
-                            REM Commit only if there are changes
-                            git diff --cached --quiet || git commit -m "${COMMIT_MESSAGE}"
- 
-                            REM Push using token
-                            git push https://%GIT_USER%:%GIT_TOKEN%@github.com/JoshuaNath/Capstone_Project_BStackDemo.git ${BRANCH_NAME}
-                        """
-                    }
-                }
-            }
-        }
-    }
- 
-    post {
-        always {
-            // Archive screenshots
-            archiveArtifacts artifacts: 'reports/screenshots/*', fingerprint: true
- 
-            // Publish Cucumber Report
-        publishHTML(target: [
-            allowMissing: false,
-            alwaysLinkToLastBuild: true,
-            keepAll: true,
-            reportDir: 'target',
-            reportFiles: 'cucumber-reports.html',
-            reportName: 'Cucumber Report'
-        ])
+  agent any
+  options { skipDefaultCheckout(true) }  
+  environment {
+    APP_ENV    = 'dev'
+    LOCAL_REPO = 'C:\\Users\\nathj\\eclipse-workspace\\bstackdemo'
+  }
 
-        // Publish Extent Report
-        publishHTML(target: [
-            allowMissing: false,
-            alwaysLinkToLastBuild: true,
-            keepAll: true,
-            reportDir: 'test-output',
-            reportFiles: 'ExtentReport.html',
-            reportName: 'Extent Report'
-        ])
+  stages {
+    stage('Trust local repo') {
+      steps {
+        ws(env.LOCAL_REPO) {
+          bat 'git config --global --add safe.directory C:\Users\nathj\eclipse-workspace\bstackdemo'
         }
+      }
     }
+
+    stage('Build & Test') {
+      steps {
+        ws(env.LOCAL_REPO) {
+          echo 'Running TestNG + Cucumber via Maven...' 
+          bat 'mvn -B clean test' 
+        }
+      }
+    }
+
+    stage('Publish Reports') {
+      steps {
+        ws(env.LOCAL_REPO) {
+          echo 'Publishing Cucumber and Extent reports...' 
+          cucumber fileIncludePattern: 'target/*.json',
+                   buildStatus: 'UNSTABLE',
+                   classifications: [[key: 'Env', value: "${env.APP_ENV}"]] 
+          publishHTML(target: [
+            reportDir: 'test-output',
+            reportFiles:'ExtentReport.html',
+            reportName: 'Extent Report',
+            keepAll: true,
+            allowMissing: false,
+            alwaysLinkToLastBuild: true
+          ]) 
+        }
+      }
+    }
+
+    stage('Commit & Push (no reset)') {
+      steps {
+        ws(env.LOCAL_REPO) {
+          withCredentials([gitUsernamePassword(credentialsId: 'Jenkins', gitToolName: 'Default')]) {
+            bat '''
+              @echo off
+              git config user.email "mirthya.s.ad.2020@snsce.ac.in"
+              git config user.name  "Admin"
+
+              REM Ensure upstream is set once; ignore error if already set
+              git branch --set-upstream-to=origin/main 1>NUL 2>NUL
+
+              REM Commit local changes (does nothing if no changes)
+              git add -A
+              git commit -m "ci: auto-commit from Jenkins" || echo No local changes to commit
+
+              REM Rebase onto origin without discarding local commits; auto-stash uncommitted edits
+              git pull --rebase --autostash origin main
+
+              REM Push current branch to origin/main
+              if not "%BRANCH_NAME%"=="" (
+                git push origin %BRANCH_NAME%
+              ) else (
+                git push origin HEAD:main
+              )
+            '''
+          } 
+        }
+      }
+    }
+
+    stage('Deploy') {
+      steps { echo "Deploying to ${env.APP_ENV}..." }
+    }
+  }
+
+  post {
+    always  { echo "Build result: ${currentBuild.currentResult}" } 
+    success { echo 'Pipeline succeeded!' } 
+    failure { echo 'Pipeline failed! Check Jenkins logs and reports.' } 
+  }
 }
