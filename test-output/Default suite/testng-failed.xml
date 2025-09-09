@@ -5,9 +5,14 @@
     <classes>
       <class name="tests.HomeTest">
         <methods>
+          <include name="testOffersPage"/>
+          <include name="testFavoritesPage"/>
           <include name="testSortProducts"/>
           <include name="tearDown"/>
+          <include name="testSelectAllVendors"/>
           <include name="setUp"/>
+          <include name="testOrdersPage"/>
+          <include name="testGoToHomePage"/>
         </methods>
       </class> <!-- tests.HomeTest -->
     </classes>

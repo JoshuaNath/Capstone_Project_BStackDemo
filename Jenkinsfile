@@ -1,72 +1,92 @@
 pipeline {
-  agent any
-  environment { APP_ENV = 'dev' }
-
-  stages {
-    stage('Clone') {
-      steps {
-        git branch: 'main', url: 'https://github.com/JoshuaNath/Capstone_Project_BStackDemo.git'
-      }
+    agent any
+ 
+    environment {
+        BRANCH_NAME = 'main'
+        ECLIPSE_WORKSPACE = 'C:\\Users\\nathj\\eclipse-workspace\\bstackdemo'
+        COMMIT_MESSAGE = 'Jenkins: Auto-commit after build'
     }
-
-    stage('Build & Test') {
-      steps {
-        echo 'Running TestNG via Maven...'
-        bat 'mvn -B clean test'
-      }
+ 
+    // Auto-trigger every 5 mins on Git changes
+    triggers {
+        pollSCM('H H * * *')
     }
-    
-    
-    
-    stage('Push Changes') {
+ 
+    stages {
+        stage('Checkout from Git') {
             steps {
-                echo 'Pushing local changes to GitHub...'
-                withCredentials([usernamePassword(credentialsId: 'CapstoneProject', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
-                    bat """
-                    git config user.email "nathjoshua1502@gmail.com"
-                    git config user.name "Admin"
-
-                    git add .
-                    git commit -m "Automated commit from Jenkins" || echo "No changes to commit"
-
-                    git push https://${GIT_USER}:${GIT_TOKEN}@github.com/JoshuaNath/Capstone_Project_BStackDemo.git HEAD:main
-                    """
+                git branch: "${env.BRANCH_NAME}",
+                    url: 'https://github.com/JoshuaNath/Capstone_Project_BStackDemo.git'
+            }
+        }
+ 
+        stage('Copy Files from Eclipse Workspace') {
+            steps {
+                bat """
+                echo Copying files from Eclipse workspace...
+                xcopy /E /Y /I "${ECLIPSE_WORKSPACE}\\*" "."
+                """
+            }
+        }
+ 
+        stage('Build & Test') {
+            steps {
+                bat 'mvn clean test -DsuiteXmlFile=src/test/resources/testng.xml'
+            }
+        }
+ 
+        stage('Commit & Push Changes') {
+            steps {
+                script {
+                    echo 'Checking for changes to push...'
+                    withCredentials([usernamePassword(
+                        credentialsId: 'github-jenkins',
+                        usernameVariable: 'GIT_USER',
+                        passwordVariable: 'GIT_TOKEN')]) {
+ 
+                        bat """
+                            git config user.email "jenkins@pipeline.com"
+                            git config user.name "Jenkins CI"
+ 
+                            git status
+                            git add .
+ 
+                            REM Commit only if there are changes
+                            git diff --cached --quiet || git commit -m "${COMMIT_MESSAGE}"
+ 
+                            REM Push using token
+                            git push https://%GIT_USER%:%GIT_TOKEN%@github.com/JoshuaNath/Capstone_Project_BStackDemo.git ${BRANCH_NAME}
+                        """
+                    }
                 }
-            }
-        }
-
-
-    stage('Publish Reports') {
-      steps {
-        echo 'Publishing Extent reports...'
-
-        cucumber fileIncludePattern: 'target/*.json',
-                 buildStatus: 'UNSTABLE',
-                 classifications: [[key: 'Env', value: "${env.APP_ENV}"]]
-
-
-        
-        publishHTML(target: [
-          reportDir: 'test-output',
-          reportFiles: 'ExtentReport.html',
-          reportName: 'Extent Report',
-          keepAll: true,
-          allowMissing: false,
-          alwaysLinkToLastBuild: true
-        ])
-      }
+            }
+        }
     }
-
-    stage('Deploy') {
-      steps {
-        echo "Deploying to ${env.APP_ENV}..."
-      }
+ 
+    post {
+        always {
+            // Archive screenshots
+            archiveArtifacts artifacts: 'reports/screenshots/*', fingerprint: true
+ 
+            // Publish Cucumber Report
+            publishHTML(target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'target/cucumber-reports',
+                reportFiles: 'cucumber-reports.html',
+                reportName: 'Cucumber Report'
+            ])
+ 
+            // Publish Extent Report
+            publishHTML(target: [
+                allowMissing: false,
+                alwaysLinkToLastBuild: true,
+                keepAll: true,
+                reportDir: 'target/extent-reports',
+                reportFiles: 'index.html',
+                reportName: 'Extent Report'
+            ])
+        }
     }
-  }
-
-  post {
-    always { echo "Build result: ${currentBuild.currentResult}" }
-    success { echo ' Pipeline succeeded!' }
-    failure { echo ' Pipeline failed! Check Jenkins logs and reports.' }
-  }
 }
